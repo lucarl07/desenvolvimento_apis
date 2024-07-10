@@ -3,7 +3,9 @@ import express from "express";
 import mysql from "mysql2";
 import { v4 as uuidv4 } from "uuid";
 
+// Variáveis do ambiente (environment variables):
 const PORT = process.env.PORT;
+const MYSQL_DB_PASSWORD = process.env.MYSQL_DB_PASSWORD;
 
 const app = express();
 
@@ -13,7 +15,7 @@ app.use(express.json());
 const conn = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: process.env.MYSQL_DB_PASSWORD,
+  password: MYSQL_DB_PASSWORD,
   database: "livraria",
   port: "3306",
 });
@@ -30,4 +32,9 @@ conn.connect((err) => {
   app.listen(PORT, () => {
     console.log(`Bem-vindo à Livraria API! \nServidor on PORT: ${PORT} 🚀 \n`);
   });
+});
+
+// Rota 404
+app.use((request, response) => {
+  response.status(404).json({ mensagem: "Rota não encontrada." });
 });
