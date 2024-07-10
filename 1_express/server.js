@@ -1,6 +1,9 @@
 // Importa o módulo do Express.js:
 import express from "express";
 
+// Importando dependências externas:
+import { v4 as uuidv4 } from "uuid";
+
 // Cria uma porta para o servidor
 const PORT = 3333;
 
@@ -22,39 +25,85 @@ app.use(express.json());
 
 // Criando o Middleware:
 const logRoutes = (request, response, next) => {
-  const { url, method } = request
-  const route = `[${method.toUpperCase()}] ${url}`
-  console.log(route)
-  next()
+  const { url, method } = request;
+  const route = `[${method.toUpperCase()}] ${url}`;
+  console.log(route);
+  next();
 };
 
 // Implementando o Middleware em todas as rotas:
 app.use(logRoutes);
+
+const users = [];
 
 // Usando Query Params no endpoint GET /users
 app.get("/users", (req, res) => {
   const { nome, idade } = req.query;
   console.log(nome, idade);
 
-  res.status(200).json(["Pessoa 1", "Pessoa 2", "Pessoa 3"]);
+  res.status(200).json(users);
 });
 
 app.post("/users", (req, res) => {
-  const { nome, idade, hotel } = req.body;
-  console.log(`Name: ${nome} \nAge: ${idade} \nHotel: ${hotel}`);
+  const { nome, idade } = req.body;
 
-  res.status(201).json(["Pessoa 1", "Pessoa 2", "Pessoa 3", "Pessoa 4"]);
+  if (!nome) {
+    res.status(400).json({ mensagem: '"nome" é um campo obrigatório.' });
+    return;
+  }
+  if (!idade) {
+    res.status(400).json({ mensagem: '"nome" é um campo obrigatório.' });
+    return;
+  }
+
+  const user = {
+    id: uuidv4(),
+    nome,
+    idade,
+  };
+  users.push(user);
+
+  res.status(201).json({
+    mensagem: `Usuário cadastrado com sucesso!`,
+    usuario: user,
+  });
 });
 
-app.put("/users/:id/:cpf", (req, res) => {
-  const { id, cpf } = req.params;
-  console.log(`ID: ${id}, CPF: ${cpf}`);
+app.put("/users/:id", (req, res) => {
+  const { id } = req.params;
+  const { nome, idade } = req.body;
 
-  res.status(200).json(["Pessoa 1", "Pessoa 2", "Pessoa 3", "Pessoa 10"]);
+  const index = users.findIndex(user => user.id === id)
+  if (index == -1) {
+    res.status(400).json({ mensagem: "Usuário não encontrado." })
+    return;
+  }
+
+  const updtUser = {
+    nome,
+    idade
+  }
+  users[index] = {
+    id: users[index].id,
+    ...updtUser
+  }
+
+  res.status(200).json(users[index]);
 });
 
-app.delete("/users", (req, res) => {
-  res.status(204).json("Task completed succesfully!");
+app.delete("/users/:id", (req, res) => {
+  const id = req.params.id;
+
+  const index = users.findIndex(user => user.id === id)
+  if (index == -1) {
+    res.status(400).json({ 
+      mensagem: `Usuário não encontrado. Talvez ele nunca tenha existido mesmo ¯\\_(ツ)_/¯` 
+    })
+    return;
+  }
+
+  users.splice(index, 1)
+  res.status(204).send(`Usuário ${id} apagado com sucesso!`);
 });
 
 // Atribuir a porta em que o servidor deve ser iniciado e a sua resposta
