@@ -7,6 +7,9 @@ const PORT = 3333;
 // Atribui uma função Express à constante app
 const app = express();
 
+// (Middleware) Aceitar JSON
+app.use(express.json());
+
 // Rotas:
 /** Tipos de HTTP Requests:
  * query params - ...:3333/pessoas?nome="Luiz"&idade=17
@@ -17,15 +20,25 @@ const app = express();
  *  ↪  Rotas do tipo POST (cadastro de informações)
  */
 
+// Usando Query Params no endpoint GET /users
 app.get("/users", (req, res) => {
+  const { nome, idade } = req.query;
+  console.log(nome, idade);
+
   res.status(200).json(["Pessoa 1", "Pessoa 2", "Pessoa 3"]);
 });
 
 app.post("/users", (req, res) => {
+  const { nome, idade, hotel } = req.body;
+  console.log(`Name: ${nome} \nAge: ${idade} \nHotel: ${hotel}`);
+
   res.status(201).json(["Pessoa 1", "Pessoa 2", "Pessoa 3", "Pessoa 4"]);
 });
 
-app.put("/users", (req, res) => {
+app.put("/users/:id/:cpf", (req, res) => {
+  const { id, cpf } = req.params;
+  console.log(`ID: ${id}, CPF: ${cpf}`);
+
   res.status(200).json(["Pessoa 1", "Pessoa 2", "Pessoa 3", "Pessoa 10"]);
 });
 
