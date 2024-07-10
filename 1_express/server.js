@@ -7,7 +7,7 @@ const PORT = 3333;
 // Atribui uma função Express à constante app
 const app = express();
 
-// (Middleware) Aceitar JSON
+// Aceitar JSON
 app.use(express.json());
 
 // Rotas:
@@ -19,6 +19,17 @@ app.use(express.json());
  * body params - ...:3333/pessoas
  *  ↪  Rotas do tipo POST (cadastro de informações)
  */
+
+// Criando o Middleware:
+const logRoutes = (request, response, next) => {
+  const { url, method } = request
+  const route = `[${method.toUpperCase()}] ${url}`
+  console.log(route)
+  next()
+};
+
+// Implementando o Middleware em todas as rotas:
+app.use(logRoutes);
 
 // Usando Query Params no endpoint GET /users
 app.get("/users", (req, res) => {
