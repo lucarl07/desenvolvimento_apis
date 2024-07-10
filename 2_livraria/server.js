@@ -7,7 +7,27 @@ const PORT = process.env.PORT;
 
 const app = express();
 
-app.listen(PORT, () => {
+app.use(express.json());
+
+// Criando a conexão com o banco de dados SQL
+const conn = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: process.env.MYSQL_DB_PASSWORD,
+  database: "livraria",
+  port: "3306",
+});
+
+// Conectando ao banco de dados
+conn.connect((err) => {
+  if (err) {
+    return console.log(err.stack);
+  }
+
   console.clear();
-  console.log(`📚  Bem-vindo à Livraria API! \n🚀  Servidor on PORT: ${PORT}`);
+  console.log("Conectado ao banco de dados com êxito...");
+
+  app.listen(PORT, () => {
+    console.log(`Bem-vindo à Livraria API! \nServidor on PORT: ${PORT} 🚀 \n`);
+  });
 });
