@@ -5,17 +5,15 @@ import { v4 as uuidv4 } from "uuid";
 
 // Variáveis do ambiente (environment variables):
 const PORT = process.env.PORT;
-const MYSQL_DB_PASSWORD = process.env.MYSQL_DB_PASSWORD;
 
 const app = express();
-
 app.use(express.json());
 
 // Criando a conexão com o banco de dados SQL
 const conn = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: MYSQL_DB_PASSWORD,
+  password: process.env.MYSQL_DB_PASSWORD,
   database: "livraria",
   port: "3306",
 });
@@ -27,7 +25,7 @@ conn.connect((err) => {
   }
 
   console.clear();
-  console.log("Conectado ao banco de dados com êxito...");
+  console.log("[Conectado ao banco de dados com êxito...]");
 
   app.listen(PORT, () => {
     console.log(`Bem-vindo à Livraria API! \nServidor on PORT: ${PORT} 🚀 \n`);
