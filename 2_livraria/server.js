@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 // Variáveis do ambiente (environment variables):
 const PORT = process.env.PORT;
 
+// Inicializando o Express (e permitindo o uso de JSON)
 const app = express();
 app.use(express.json());
 
@@ -45,8 +46,6 @@ app.get("/livros", (req, res) => {
     }
 
     const livros = data;
-    // console.log(data);
-    // console.log(typeof data);
     res.status(200).json(livros);
   });
 });
@@ -70,7 +69,9 @@ app.post("/livros", (req, res) => {
 
   conn.query(checkSQL, (err, data) => {
     if (err) {
-      res.status(500).json({ message: "Erro ao fazer uma verificação no banco de dados." });
+      res
+        .status(500)
+        .json({ message: "Erro ao fazer uma verificação no banco de dados." });
       return console.log(err);
     }
 
@@ -79,8 +80,8 @@ app.post("/livros", (req, res) => {
       return console.log(err);
     }
 
-    const id = uuidv4(),
-    disponibilidade = 1
+    const id = uuidv4()
+    const disponibilidade = 1;
 
     const insertSQL = /*sql*/ `
       INSERT INTO livros (id, titulo, autor, ano_publicacao, genero, preco, disponibilidade)
@@ -93,8 +94,8 @@ app.post("/livros", (req, res) => {
         return console.log(err);
       }
 
-      res.status(201).json({ message: "Livro cadastrado com sucesso." })
-    })
+      res.status(201).json({ message: "Livro cadastrado com sucesso." });
+    });
   });
 });
 
