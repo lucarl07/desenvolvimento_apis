@@ -14,7 +14,7 @@ app.use(express.json());
 const conn = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: process.env.MYSQL_DB_PASSWORD,
+  password: process.env.MYSQL_PASSWORD,
   database: "livraria",
   port: "3306",
 });
@@ -80,7 +80,7 @@ app.post("/livros", (req, res) => {
       return console.log(err);
     }
 
-    const id = uuidv4()
+    const id = uuidv4();
     const disponibilidade = 1;
 
     const insertSQL = /*sql*/ `
