@@ -61,16 +61,16 @@ app.post("/livros", (req, res) => {
       .json({ message: "Dados insuficientes para realizar o cadastro." });
   }
 
-  const checkSql = /*sql*/ `
+  const checkSQL = /*sql*/ `
     SELECT * FROM livros 
     WHERE titulo = "${titulo}" 
     AND autor = "${autor}"
     AND ano_publicacao = "${ano_publicacao}"
   `;
 
-  conn.query(checkSql, (err, data) => {
+  conn.query(checkSQL, (err, data) => {
     if (err) {
-      res.status(500).json({ message: "Erro ao buscar os livros." });
+      res.status(500).json({ message: "Erro ao fazer uma verificação no banco de dados." });
       return console.log(err);
     }
 
@@ -78,6 +78,23 @@ app.post("/livros", (req, res) => {
       res.status(409).json({ message: "O livro já existe na livraria." });
       return console.log(err);
     }
+
+    const id = uuidv4(),
+    disponibilidade = 1
+
+    const insertSQL = /*sql*/ `
+      INSERT INTO livros (id, titulo, autor, ano_publicacao, genero, preco, disponibilidade)
+      VALUES ("${id}", "${titulo}", "${autor}", "${ano_publicacao}", "${genero}", "${preco}", "${disponibilidade}")
+    `;
+
+    conn.query(insertSQL, (err) => {
+      if (err) {
+        res.status(500).json({ message: "Erro interno ao adicionar o livro." });
+        return console.log(err);
+      }
+
+      res.status(201).json({ message: "Livro cadastrado com sucesso." })
+    })
   });
 });
 
