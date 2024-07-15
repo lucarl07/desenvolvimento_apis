@@ -35,7 +35,7 @@ conn.connect((err) => {
 // Ver o catálogo de livros
 app.get("/livros", (req, res) => {
   // Query para o banco de dados:
-  const sql = "SELECT * FROM livros";
+  const sql = /*sql*/ `SELECT * FROM livros`;
   console.log(`Query --> ${sql}`);
 
   conn.query(sql, (err, data) => {
@@ -61,10 +61,12 @@ app.post("/livros", (req, res) => {
       .json({ message: "Dados insuficientes para realizar o cadastro." });
   }
 
-  const checkSql = `SELECT * FROM livros 
+  const checkSql = /*sql*/ `
+    SELECT * FROM livros 
     WHERE titulo = "${titulo}" 
     AND autor = "${autor}"
-    AND ano_publicacao = "${ano_publicacao}"`;
+    AND ano_publicacao = "${ano_publicacao}"
+  `;
 
   conn.query(checkSql, (err, data) => {
     if (err) {
