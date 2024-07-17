@@ -13,7 +13,6 @@ const app = express();
 // Aceitar JSON
 app.use(express.json());
 
-// Rotas:
 /** Tipos de HTTP Requests:
  * query params - ...:3333/pessoas?nome="Luiz"&idade=17
  *  ↪  Rotas do tipo GET (filtros e buscas)
