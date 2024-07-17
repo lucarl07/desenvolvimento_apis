@@ -33,6 +33,8 @@ conn.connect((err) => {
   });
 });
 
+/* =:=:=:=:=:=:=:=:= ROTAS DE LIVROS =:=:=:=:=:=:=:=:= */
+
 // Ver o catálogo de livros
 app.get("/livros", (req, res) => {
   // Query para o banco de dados:
@@ -202,6 +204,8 @@ app.delete("/livros/:id", (req, res) => {
     res.status(200).json({ message: "Livro removido com sucesso." });
   });
 });
+
+/* =:=:=:=:=:=:=:=:= ROTAS DE FUNCIONÁRIOS =:=:=:=:=:=:=:=:= */
 
 // Rota 404
 app.use((request, response) => {
