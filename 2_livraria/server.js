@@ -207,6 +207,24 @@ app.delete("/livros/:id", (req, res) => {
 
 /* =:=:=:=:=:=:=:=:= ROTAS DE FUNCIONÁRIOS =:=:=:=:=:=:=:=:= */
 
+app.get("/funcionarios", (req, res) => {
+})
+
+app.post("/funcionarios", (req, res) => {
+})
+
+app.get("/funcionarios/:id", (req, res) => {
+  const id = req.params.id
+})
+
+app.put("/funcionarios/:id", (req, res) => {
+  const id = req.params.id
+})
+
+app.delete("/funcionarios/:id", (req, res) => {
+  const id = req.params.id
+})
+
 // Rota 404
 app.use((request, response) => {
   response.status(404).json({ message: "Rota não encontrada." });
