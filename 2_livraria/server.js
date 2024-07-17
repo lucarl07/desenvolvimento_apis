@@ -280,7 +280,7 @@ app.get("/funcionarios/:id", (req, res) => {
 
   conn.query(sql, (err, data) => {
     if (err) {
-      res.status(500).json({ message: "Erro ao buscar o funcionário." })
+      res.status(500).json({ message: "Erro ao buscar funcionário." })
       return console.log(err);
     }
 
@@ -293,9 +293,72 @@ app.get("/funcionarios/:id", (req, res) => {
   })
 })
 
-// Altera dados de um funcionário
+// Alterar dados de um funcionário
 app.put("/funcionarios/:id", (req, res) => {
   const id = req.params.id
+  const { 
+    nome, cargo, 
+    data_contratacao, 
+    salario, email
+  } = req.body;
+
+  if (!nome || !cargo || !data_contratacao || !salario || !email) {
+    return res
+      .status(401)
+      .json({ message: "Dados insuficientes para atualização." });
+  }
+
+  const searchSQL = /*sql*/ `
+    SELECT * FROM funcionarios WHERE id = "${id}"
+  `;
+
+  conn.query(searchSQL, ($err, $data) => {
+    if ($err) {
+      res.status(500).json({ message: "Erro ao buscar funcionário." });
+      return console.error($err);
+    }
+
+    if ($data.length === 0) {
+      res.status(404).json({ message: "Funcionário não encontrado." });
+      return;
+    }
+
+    const verifySQL = /*sql*/ `
+      SELECT * FROM funcionarios
+      WHERE email = "${email}"
+      AND id != "${id}"
+    `;
+
+    conn.query(verifySQL, (err, data) => {
+      if (err) {
+        res.status(500).json({ message: "Erro ao buscar funcionário." });
+        return console.error(err);
+      }
+
+      if (data.length > 0) {
+        return res.status(409).json({ message: "O e-mail já fui utilizado em outro cadastro." });
+      }
+
+      const updateSQL = /*sql*/ `
+        UPDATE funcionarios SET
+        nome = "${nome}",
+        cargo = "${cargo}",
+        data_contratacao = "${data_contratacao}",
+        salario = "${salario}",
+        email = "${email}"
+        WHERE id = "${id}"
+      `;
+
+      conn.query(updateSQL, (err) => {
+        if (err) {
+          res.status(500).json({ message: "Erro ao atualizar funcionário." });
+          return console.error(err);
+        }
+
+        res.status(200).json({ message: "Funcionário atualizado com sucesso", data: $data[0] })
+      })
+    })
+  })
 })
 
 // Remove um funcionário
@@ -308,7 +371,7 @@ app.delete("/funcionarios/:id", (req, res) => {
 
   conn.query(sql, (err, info) => {
     if (err) {
-      res.status(500).json({ message: "Erro ao buscar o funcionário." });
+      res.status(500).json({ message: "Erro ao buscar funcionário." });
       return console.log(err)
     }
 
