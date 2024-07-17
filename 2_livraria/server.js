@@ -207,6 +207,7 @@ app.delete("/livros/:id", (req, res) => {
 
 /* =:=:=:=:=:=:=:=:= ROTAS DE FUNCIONÁRIOS =:=:=:=:=:=:=:=:= */
 
+// Pesquisar todos os funcionários
 app.get("/funcionarios", (req, res) => {
   const sql = /*sql*/ `
     SELECT * FROM funcionarios
@@ -222,6 +223,7 @@ app.get("/funcionarios", (req, res) => {
   })
 })
 
+// Adicionar um funcionário
 app.post("/funcionarios", (req, res) => {
   const { 
     nome, cargo, 
@@ -267,8 +269,23 @@ app.post("/funcionarios", (req, res) => {
   })
 })
 
+// Pesquisar um funcionário
 app.get("/funcionarios/:id", (req, res) => {
   const id = req.params.id
+
+  const sql = /*sql*/ `
+    SELECT * FROM funcionarios
+    WHERE id = "${id}"
+  `;
+
+  conn.query(sql, (err, data) => {
+    if (err) {
+      res.status(500).json({ message: "Erro ao buscar funcionários." })
+      return console.log(err);
+    }
+
+    res.status(200).json(data[0]);
+  })
 })
 
 app.put("/funcionarios/:id", (req, res) => {
