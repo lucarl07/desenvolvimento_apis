@@ -280,12 +280,12 @@ app.get("/funcionarios/:id", (req, res) => {
 
   conn.query(sql, (err, data) => {
     if (err) {
-      res.status(500).json({ message: "Erro ao buscar funcionários." })
+      res.status(500).json({ message: "Erro ao buscar o funcionário." })
       return console.log(err);
     }
 
     if (data.length === 0) {
-      res.status(404).json({ message: "Livro não encontrado." });
+      res.status(404).json({ message: "Funcionário não encontrado." });
       return;
     }
 
@@ -301,6 +301,23 @@ app.put("/funcionarios/:id", (req, res) => {
 // Remove um funcionário
 app.delete("/funcionarios/:id", (req, res) => {
   const id = req.params.id
+
+  const sql = /*sql*/ `
+    DELETE FROM funcionarios WHERE id = "${id}"
+  `;
+
+  conn.query(sql, (err, info) => {
+    if (err) {
+      res.status(500).json({ message: "Erro ao buscar o funcionário." });
+      return console.log(err)
+    }
+
+    if (info.affectedRows === 0) {
+      return res.status(404).json({ message: "Funcionário não encontrado." });
+    }
+
+    res.status(200).json({ message: "Funcionário removido com sucesso." });
+  })
 })
 
 // Rota 404
