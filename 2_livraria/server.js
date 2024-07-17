@@ -208,6 +208,18 @@ app.delete("/livros/:id", (req, res) => {
 /* =:=:=:=:=:=:=:=:= ROTAS DE FUNCIONÁRIOS =:=:=:=:=:=:=:=:= */
 
 app.get("/funcionarios", (req, res) => {
+  const sql = /*sql*/ `
+    SELECT * FROM funcionarios
+  `;
+
+  conn.query(sql, (err, data) => {
+    if (err) {
+      res.status(500).json({ message: "Erro ao buscar funcionários." })
+      return console.log(err);
+    }
+
+    res.status(200).json(data);
+  })
 })
 
 app.post("/funcionarios", (req, res) => {
