@@ -284,6 +284,11 @@ app.get("/funcionarios/:id", (req, res) => {
       return console.log(err);
     }
 
+    if (data.length === 0) {
+      res.status(404).json({ message: "Livro não encontrado." });
+      return;
+    }
+
     res.status(200).json(data[0]);
   })
 })
