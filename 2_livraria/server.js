@@ -57,7 +57,7 @@ app.post("/livros", (req, res) => {
   const { titulo, autor, ano_publicacao, genero, preco } = req.body;
 
   if (!titulo || !autor || !ano_publicacao || !genero || !preco) {
-    res
+    return res
       .status(401)
       .json({ message: "Dados insuficientes para realizar o cadastro." });
   }
