@@ -99,6 +99,29 @@ app.post("/livros", (req, res) => {
   });
 });
 
+// Listar um livro específico
+app.get("/livros/:id", (req, res) => {
+  const { id } = req.params;
+
+  const sql = /*sql*/ `
+    SELECT * FROM livros WHERE id = "${id}"
+  `;
+
+  conn.query(sql, (err, data) => {
+    if (err) {
+      res.status(500).json({ message: "Erro ao buscar livro." });
+      return console.error(err);
+    }
+
+    if (data.length === 0) {
+      res.status(404).json({ message: "Livro não encontrado." });
+      return;
+    }
+
+    res.status(200).json(data[0]);
+  });
+});
+
 // Rota 404
 app.use((request, response) => {
   response.status(404).json({ message: "Rota não encontrada." });
