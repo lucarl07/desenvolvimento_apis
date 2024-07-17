@@ -288,10 +288,12 @@ app.get("/funcionarios/:id", (req, res) => {
   })
 })
 
+// Altera dados de um funcionário
 app.put("/funcionarios/:id", (req, res) => {
   const id = req.params.id
 })
 
+// Remove um funcionário
 app.delete("/funcionarios/:id", (req, res) => {
   const id = req.params.id
 })
