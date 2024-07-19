@@ -352,7 +352,7 @@ app.put("/funcionarios/:id", (req, res) => {
       if (data.length > 0) {
         return res
           .status(409)
-          .json({ message: "O e-mail já fui utilizado em outro cadastro." });
+          .json({ message: "O e-mail já foi utilizado em outro cadastro." });
       }
 
       const updateSQL = /*sql*/ `
