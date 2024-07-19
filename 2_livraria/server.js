@@ -227,7 +227,7 @@ app.get("/funcionarios", (req, res) => {
 app.post("/funcionarios", (req, res) => {
   const { nome, cargo, data_contratacao, salario, email } = req.body;
 
-  const emailRegex =
+  const emailRegEx =
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi;
 
   if (!nome || !cargo || !data_contratacao || !salario || !email) {
@@ -237,7 +237,7 @@ app.post("/funcionarios", (req, res) => {
     });
   }
 
-  if (!emailRegex.test(email)) {
+  if (!emailRegEx.test(email)) {
     return res.status(422).json({
       message:
         "O e-mail inserido não é válido. Lembre-se de utilizar o arroba (@) e pontuação adequada."
@@ -306,7 +306,7 @@ app.get("/funcionarios/:id", (req, res) => {
 app.put("/funcionarios/:id", (req, res) => {
   const id = req.params.id;
   const { nome, cargo, data_contratacao, salario, email } = req.body;
-  const emailRegex =
+  const emailRegEx =
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi;
 
   if (!nome || !cargo || !data_contratacao || !salario || !email) {
@@ -315,7 +315,7 @@ app.put("/funcionarios/:id", (req, res) => {
       .json({ message: "Dados insuficientes para atualização." });
   }
 
-  if (!emailRegex.test(email)) {
+  if (!emailRegEx.test(email)) {
     return res.status(422).json({
       message:
         "O e-mail inserido não é válido. Lembre-se de utilizar o arroba (@) e pontuação adequada."
