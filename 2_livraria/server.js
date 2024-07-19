@@ -215,26 +215,33 @@ app.get("/funcionarios", (req, res) => {
 
   conn.query(sql, (err, data) => {
     if (err) {
-      res.status(500).json({ message: "Erro ao buscar funcionários." })
+      res.status(500).json({ message: "Erro ao buscar funcionários." });
       return console.log(err);
     }
 
     res.status(200).json(data);
-  })
-})
+  });
+});
 
 // Adicionar um funcionário
 app.post("/funcionarios", (req, res) => {
-  const { 
-    nome, cargo, 
-    data_contratacao, 
-    salario, email
-  } = req.body;
+  const { nome, cargo, data_contratacao, salario, email } = req.body;
+
+  const emailRegex =
+    /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi;
 
   if (!nome || !cargo || !data_contratacao || !salario || !email) {
-    return res
-      .status(401)
-      .json({ message: "Dados insuficientes para realizar o cadastro." });
+    return res.status(401).json({ 
+      message: 
+        "Dados insuficientes para realizar o cadastro."
+    });
+  }
+
+  if (!emailRegex.test(email)) {
+    return res.status(422).json({
+      message:
+        "O e-mail inserido não é válido. Lembre-se de utilizar o arroba (@) e pontuação adequada."
+    });
   }
 
   const verifySQL = /*sql*/ `
@@ -249,7 +256,9 @@ app.post("/funcionarios", (req, res) => {
     }
 
     if (data.length > 0) {
-      return res.status(409).json({ message: "O funcionário já está cadastrado na livraria." });
+      return res
+        .status(409)
+        .json({ message: "O funcionário já está cadastrado na livraria." });
     }
 
     const id = uuidv4();
@@ -264,14 +273,14 @@ app.post("/funcionarios", (req, res) => {
         return console.log(err);
       }
 
-      res.status(201).json({ message: "Funcionário cadastrado com sucesso." })
-    })
-  })
-})
+      res.status(201).json({ message: "Funcionário cadastrado com sucesso." });
+    });
+  });
+});
 
 // Pesquisar um funcionário
 app.get("/funcionarios/:id", (req, res) => {
-  const id = req.params.id
+  const id = req.params.id;
 
   const sql = /*sql*/ `
     SELECT * FROM funcionarios
@@ -280,7 +289,7 @@ app.get("/funcionarios/:id", (req, res) => {
 
   conn.query(sql, (err, data) => {
     if (err) {
-      res.status(500).json({ message: "Erro ao buscar funcionário." })
+      res.status(500).json({ message: "Erro ao buscar funcionário." });
       return console.log(err);
     }
 
@@ -290,22 +299,27 @@ app.get("/funcionarios/:id", (req, res) => {
     }
 
     res.status(200).json(data[0]);
-  })
-})
+  });
+});
 
 // Alterar dados de um funcionário
 app.put("/funcionarios/:id", (req, res) => {
-  const id = req.params.id
-  const { 
-    nome, cargo, 
-    data_contratacao, 
-    salario, email
-  } = req.body;
+  const id = req.params.id;
+  const { nome, cargo, data_contratacao, salario, email } = req.body;
+  const emailRegex =
+    /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi;
 
   if (!nome || !cargo || !data_contratacao || !salario || !email) {
     return res
       .status(401)
       .json({ message: "Dados insuficientes para atualização." });
+  }
+
+  if (!emailRegex.test(email)) {
+    return res.status(422).json({
+      message:
+        "O e-mail inserido não é válido. Lembre-se de utilizar o arroba (@) e pontuação adequada."
+    });
   }
 
   const searchSQL = /*sql*/ `
@@ -336,7 +350,9 @@ app.put("/funcionarios/:id", (req, res) => {
       }
 
       if (data.length > 0) {
-        return res.status(409).json({ message: "O e-mail já fui utilizado em outro cadastro." });
+        return res
+          .status(409)
+          .json({ message: "O e-mail já fui utilizado em outro cadastro." });
       }
 
       const updateSQL = /*sql*/ `
@@ -355,15 +371,18 @@ app.put("/funcionarios/:id", (req, res) => {
           return console.error(err);
         }
 
-        res.status(200).json({ message: "Funcionário atualizado com sucesso", data: $data[0] })
-      })
-    })
-  })
-})
+        res.status(200).json({
+          message: "Funcionário atualizado com sucesso",
+          data: $data[0],
+        });
+      });
+    });
+  });
+});
 
 // Remove um funcionário
 app.delete("/funcionarios/:id", (req, res) => {
-  const id = req.params.id
+  const id = req.params.id;
 
   const sql = /*sql*/ `
     DELETE FROM funcionarios WHERE id = "${id}"
@@ -372,7 +391,7 @@ app.delete("/funcionarios/:id", (req, res) => {
   conn.query(sql, (err, info) => {
     if (err) {
       res.status(500).json({ message: "Erro ao buscar funcionário." });
-      return console.log(err)
+      return console.log(err);
     }
 
     if (info.affectedRows === 0) {
@@ -380,8 +399,8 @@ app.delete("/funcionarios/:id", (req, res) => {
     }
 
     res.status(200).json({ message: "Funcionário removido com sucesso." });
-  })
-})
+  });
+});
 
 // Rota 404
 app.use((request, response) => {
