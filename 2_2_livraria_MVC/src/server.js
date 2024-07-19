@@ -5,6 +5,9 @@ import express, { application } from "express"
 // API Modules:
 import conn from "./config/conn.js"
 
+// Database models:
+import "./models/livroModel.js"
+
 const PORT = process.env.PORT
 
 const app = express()
