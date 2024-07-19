@@ -2,7 +2,7 @@
   "name": "2_2_livraria_mvc",
   "version": "1.0.0",
   "description": "",
-  "main": "src/server.js",
+  "main": "./src/server.js",
   "type": "module",
   "scripts": {
     "dev": "nodemon ./src/server.js",
