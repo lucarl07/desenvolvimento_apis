@@ -231,16 +231,15 @@ app.post("/funcionarios", (req, res) => {
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi;
 
   if (!nome || !cargo || !data_contratacao || !salario || !email) {
-    return res.status(401).json({ 
-      message: 
-        "Dados insuficientes para realizar o cadastro."
+    return res.status(401).json({
+      message: "Dados insuficientes para realizar o cadastro.",
     });
   }
 
   if (!emailRegEx.test(email)) {
     return res.status(422).json({
       message:
-        "O e-mail inserido não é válido. Lembre-se de utilizar o arroba (@) e pontuação adequada."
+        "O e-mail inserido não é válido. Lembre-se de utilizar o arroba (@) e pontuação adequada.",
     });
   }
 
@@ -318,7 +317,7 @@ app.put("/funcionarios/:id", (req, res) => {
   if (!emailRegEx.test(email)) {
     return res.status(422).json({
       message:
-        "O e-mail inserido não é válido. Lembre-se de utilizar o arroba (@) e pontuação adequada."
+        "O e-mail inserido não é válido. Lembre-se de utilizar o arroba (@) e pontuação adequada.",
     });
   }
 
@@ -405,4 +404,15 @@ app.delete("/funcionarios/:id", (req, res) => {
 // Rota 404
 app.use((request, response) => {
   response.status(404).json({ message: "Rota não encontrada." });
+});
+
+process.on("SIGINT", () => {
+  conn.end((err) => {
+    if (err) {
+      console.error(`Erro ao finalizar conexão | ${err.message}`)
+      return;
+    }
+    console.error(`[Conexão com a database MySQL encerrada.]`);
+    process.exit();
+  });
 });
