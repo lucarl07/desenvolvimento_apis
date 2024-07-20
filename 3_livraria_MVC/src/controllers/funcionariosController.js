@@ -169,4 +169,23 @@ export const atualizarFuncionario = (req, res) => {
   });
 }
 
-export const removerFuncionario = (req, res) => {}
+export const removerFuncionario = (req, res) => {
+  const id = req.params.id;
+
+  const sql = /*sql*/ `
+    DELETE FROM funcionarios WHERE id = "${id}"
+  `;
+
+  conn.query(sql, (err, info) => {
+    if (err) {
+      res.status(500).json({ message: "Erro ao buscar funcionário." });
+      return console.log(err);
+    }
+
+    if (info.affectedRows === 0) {
+      return res.status(404).json({ message: "Funcionário não encontrado." });
+    }
+
+    res.status(200).json({ message: "Funcionário removido com sucesso." });
+  });
+}
