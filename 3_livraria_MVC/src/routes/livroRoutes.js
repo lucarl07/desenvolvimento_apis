@@ -2,12 +2,15 @@
 import { Router } from "express";
 
 // Controllers:
-import { getLivros, postLivros } from "../controllers/livrosController.js";
+import {
+  buscarLivros,
+  cadastrarLivro,
+} from "../controllers/livrosController.js";
 
 const router = Router();
 
-router.get("/", getLivros);
-router.post("/", postLivros);
+router.get("/", buscarLivros);
+router.post("/", cadastrarLivro);
 router.put("/:id");
 router.delete("/:id");
 router.get("/:id");

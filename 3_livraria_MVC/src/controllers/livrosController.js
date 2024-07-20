@@ -1,7 +1,7 @@
 import conn from "../config/conn.js";
 import { v4 as uuidv4 } from "uuid";
 
-export const getLivros = (req, res) => {
+export const buscarLivros = (req, res) => {
   const sql = /*sql*/ `SELECT * FROM livros`;
 
   conn.query(sql, (err, data) => {
@@ -15,7 +15,7 @@ export const getLivros = (req, res) => {
   });
 };
 
-export const postLivros = (req, res) => {
+export const cadastrarLivro = (req, res) => {
   const { titulo, autor, ano_publicacao, genero, preco } = req.body;
 
   if (!titulo || !autor || !ano_publicacao || !genero || !preco) {
