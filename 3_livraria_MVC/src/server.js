@@ -5,6 +5,7 @@ import express, { application } from "express";
 // Database models:
 import "./models/livroModel.js";
 import "./models/funcionarioModel.js";
+import "./models/clienteModel.js";
 
 // Route modules:
 import defRoute from "./routes/defRoute.js";
@@ -18,8 +19,8 @@ const PORT = process.env.PORT;
 const app = express();
 
 // Middleware:
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.listen(PORT, () => {
   console.clear();
@@ -29,4 +30,4 @@ app.listen(PORT, () => {
 
 app.use("/", defRoute);
 app.use("/livros", livroRoutes);
-app.use("/funcionarios", funcionarioRoutes)
+app.use("/funcionarios", funcionarioRoutes);
