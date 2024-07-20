@@ -1,6 +1,6 @@
 import conn from "../config/conn.js";
 
-const tableLivros = /*sql*/ `
+const tbLivros = /*sql*/ `
   CREATE TABLE IF NOT EXISTS livros(
     id VARCHAR(60) PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
@@ -14,7 +14,7 @@ const tableLivros = /*sql*/ `
   );
 `;
 
-conn.query(tableLivros, (err, result, field) => {
+conn.query(tbLivros, (err, result, field) => {
   if (err) {
     console.error("Erro ao criar a tabela: " + err.stack);
     return;
