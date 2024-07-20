@@ -161,4 +161,24 @@ export const buscarLivroPorId = (req, res) => {
   });
 };
 
-export const buscarLivroPorNome = (req, res) => {};
+export const buscarLivroPorNome = (req, res) => {
+  const { nome } = req.query;
+
+  const sql = /*sql*/ `
+    SELECT * FROM livros WHERE titulo LIKE "%${nome}%"
+  `;
+
+  conn.query(sql, (err, data) => {
+    if (err) {
+      res.status(500).json({ message: "Erro ao buscar livro." });
+      return console.error(err);
+    }
+
+    if (data.length === 0) {
+      res.status(404).json({ message: "Livro não encontrado." });
+      return;
+    }
+
+    res.status(200).json(data);
+  });
+};
