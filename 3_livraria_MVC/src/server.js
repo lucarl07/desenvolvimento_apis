@@ -2,9 +2,6 @@
 import "dotenv/config";
 import express, { application } from "express";
 
-// API Modules:
-import conn from "./config/conn.js";
-
 // Database models:
 import "./models/livroModel.js";
 import "./models/funcionarioModel.js";
