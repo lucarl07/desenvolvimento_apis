@@ -92,6 +92,81 @@ export const buscarFuncionarioPorId = (req, res) => {
   });
 }
 
-export const atualizarFuncionario = (req, res) => {}
+export const atualizarFuncionario = (req, res) => {
+  const id = req.params.id;
+  const { nome, cargo, dt_contratacao, salario, email } = req.body;
+  const emailRegEx =
+    /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi;
+
+  if (!nome || !cargo || !dt_contratacao || !salario || !email) {
+    return res
+      .status(401)
+      .json({ message: "Dados insuficientes para atualização." });
+  }
+
+  if (!emailRegEx.test(email)) {
+    return res.status(422).json({
+      message:
+        "O e-mail inserido não é válido. Lembre-se de utilizar o arroba (@) e pontuação adequada.",
+    });
+  }
+
+  const searchSQL = /*sql*/ `
+    SELECT * FROM funcionarios WHERE id = "${id}"
+  `;
+
+  conn.query(searchSQL, ($err, $data) => {
+    if ($err) {
+      res.status(500).json({ message: "Erro ao buscar funcionário." });
+      return console.error($err);
+    }
+
+    if ($data.length === 0) {
+      res.status(404).json({ message: "Funcionário não encontrado." });
+      return;
+    }
+
+    const verifySQL = /*sql*/ `
+      SELECT * FROM funcionarios
+      WHERE email = "${email}"
+      AND id != "${id}"
+    `;
+
+    conn.query(verifySQL, (err, data) => {
+      if (err) {
+        res.status(500).json({ message: "Erro ao buscar funcionário." });
+        return console.error(err);
+      }
+
+      if (data.length > 0) {
+        return res
+          .status(409)
+          .json({ message: "O e-mail já foi utilizado em outro cadastro." });
+      }
+
+      const updateSQL = /*sql*/ `
+        UPDATE funcionarios SET
+        nome = "${nome}",
+        cargo = "${cargo}",
+        dt_contratacao = "${dt_contratacao}",
+        salario = "${salario}",
+        email = "${email}"
+        WHERE id = "${id}"
+      `;
+
+      conn.query(updateSQL, (err) => {
+        if (err) {
+          res.status(500).json({ message: "Erro ao atualizar funcionário." });
+          return console.error(err);
+        }
+
+        res.status(200).json({
+          message: "Funcionário atualizado com sucesso",
+          data: $data[0],
+        });
+      });
+    });
+  });
+}
 
 export const removerFuncionario = (req, res) => {}
