@@ -69,7 +69,28 @@ export const adicionarFuncionario = (req, res) => {
   });
 }
 
-export const buscarFuncionarioPorId = (req, res) => {}
+export const buscarFuncionarioPorId = (req, res) => {
+  const id = req.params.id;
+
+  const sql = /*sql*/ `
+    SELECT * FROM funcionarios
+    WHERE id = "${id}"
+  `;
+
+  conn.query(sql, (err, data) => {
+    if (err) {
+      res.status(500).json({ message: "Erro ao buscar funcionário." });
+      return console.log(err);
+    }
+
+    if (data.length === 0) {
+      res.status(404).json({ message: "Funcionário não encontrado." });
+      return;
+    }
+
+    res.status(200).json(data[0]);
+  });
+}
 
 export const atualizarFuncionario = (req, res) => {}
 
