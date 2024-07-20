@@ -19,16 +19,18 @@ const PORT = process.env.PORT;
 // Initialize Express app:
 const app = express();
 
-// Middleware:
+// Using Middleware:
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// App Listener:
 app.listen(PORT, () => {
   console.clear();
   console.log("Bem vindo à 2_2_livraria_MVC API!");
   console.log(`Server on PORT: ${PORT} 🚀\n`);
 });
 
+// Using the established routes:
 app.use("/", defRoute);
 app.use("/livros", livroRoutes);
 app.use("/funcionarios", funcionarioRoutes);
