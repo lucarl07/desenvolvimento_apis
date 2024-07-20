@@ -2,6 +2,7 @@
 import { Router } from "express";
 
 // Controllers:
+import {} from "../controllers/funcionariosController.js"
 
 const router = Router();
 
