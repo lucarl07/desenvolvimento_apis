@@ -11,6 +11,7 @@ import "./models/clienteModel.js";
 import defRoute from "./routes/defRoute.js";
 import livroRoutes from "./routes/livroRoutes.js";
 import funcionarioRoutes from "./routes/funcionarioRoutes.js";
+import clienteRoutes from "./routes/clienteRoutes.js";
 
 // Server Port:
 const PORT = process.env.PORT;
@@ -31,3 +32,4 @@ app.listen(PORT, () => {
 app.use("/", defRoute);
 app.use("/livros", livroRoutes);
 app.use("/funcionarios", funcionarioRoutes);
+app.use("/clientes", clienteRoutes);
