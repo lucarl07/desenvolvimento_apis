@@ -9,6 +9,9 @@ import conn from "./config/conn.js";
 import "./models/livroModel.js";
 import "./models/funcionarioModel.js";
 
+// Route modules:
+import livroRoutes from "./routes/livroRoutes.js";
+
 const PORT = process.env.PORT
 
 const app = express();
@@ -25,3 +28,5 @@ app.get("/", (req, res) => {
     acesso: `http://localhost:${PORT}/`,
   });
 });
+
+app.use('/livros', livroRoutes)
