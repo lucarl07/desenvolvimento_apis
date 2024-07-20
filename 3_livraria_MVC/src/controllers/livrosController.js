@@ -63,7 +63,61 @@ export const cadastrarLivro = (req, res) => {
   });
 };
 
-export const alterarLivro = (req, res) => {};
+export const alterarLivro = (req, res) => {
+  const { id } = req.params;
+  const { titulo, autor, ano_publicacao, genero, preco, disponibilidade } =
+    req.body;
+
+  if (!titulo || !autor || !ano_publicacao || !genero || !preco) {
+    return res
+      .status(401)
+      .json({ message: "Dados insuficientes para realizar o cadastro." });
+  }
+
+  if (disponibilidade === undefined) {
+    return res
+      .status(400)
+      .json({ message: "Enviar a disponibilidade do livro é obrigatória." });
+  }
+
+  const sql = /*sql*/ `
+    SELECT * FROM livros WHERE id = "${id}"
+  `;
+
+  conn.query(sql, (err, data) => {
+    if (err) {
+      res.status(500).json({ message: "Erro ao buscar livro." });
+      return console.error(err);
+    }
+
+    if (data.length === 0) {
+      res.status(404).json({ message: "Livro não encontrado." });
+      return;
+    }
+
+    const updateSql = /*sql*/ `
+      UPDATE livros SET 
+      titulo = "${titulo}",
+      autor = "${autor}",
+      ano_publicacao = "${ano_publicacao}",
+      genero = "${genero}",
+      preco = "${preco}",
+      disponibilidade = "${disponibilidade}"
+      WHERE id = "${id}"
+    `;
+
+    conn.query(updateSql, (err) => {
+      if (err) {
+        res.status(500).json({ message: "Erro ao buscar livro." });
+        return console.error(err);
+      }
+
+      res
+        .status(200)
+        .json({ message: "Livro atualizado com sucesso.", data: data[0] });
+    });
+  });
+};
 
 export const removerLivro = (req, res) => {};
 
