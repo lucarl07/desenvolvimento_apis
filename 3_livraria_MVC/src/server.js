@@ -10,9 +10,15 @@ import "./models/funcionarioModel.js";
 import defRoute from "./routes/defRoute.js";
 import livroRoutes from "./routes/livroRoutes.js";
 
+// Server Port:
 const PORT = process.env.PORT;
 
+// Initialize Express app:
 const app = express();
+
+// Middleware:
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
 
 app.listen(PORT, () => {
   console.clear();
