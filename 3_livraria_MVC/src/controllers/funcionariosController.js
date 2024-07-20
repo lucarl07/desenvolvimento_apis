@@ -15,3 +15,11 @@ export const buscarFuncionarios = (req, res) => {
     res.status(200).json(data);
   });
 }
+
+export const adicionarFuncionario = (req, res) => {}
+
+export const buscarFuncionarioPorId = (req, res) => {}
+
+export const atualizarFuncionario = (req, res) => {}
+
+export const removerFuncionario = (req, res) => {}
