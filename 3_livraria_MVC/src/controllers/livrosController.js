@@ -62,3 +62,31 @@ export const cadastrarLivro = (req, res) => {
     });
   });
 };
+
+export const alterarLivro = (req, res) => {};
+
+export const removerLivro = (req, res) => {};
+
+export const buscarLivroPorId = (req, res) => {
+  const { id } = req.params;
+
+  const sql = /*sql*/ `
+    SELECT * FROM livros WHERE id = "${id}"
+  `;
+
+  conn.query(sql, (err, data) => {
+    if (err) {
+      res.status(500).json({ message: "Erro ao buscar livro." });
+      return console.error(err);
+    }
+
+    if (data.length === 0) {
+      res.status(404).json({ message: "Livro não encontrado." });
+      return;
+    }
+
+    res.status(200).json(data[0]);
+  });
+};
+
+export const buscarLivroPorNome = (req, res) => {};
