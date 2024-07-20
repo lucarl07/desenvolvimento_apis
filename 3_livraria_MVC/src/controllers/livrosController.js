@@ -119,7 +119,25 @@ export const alterarLivro = (req, res) => {
   });
 };
 
-export const removerLivro = (req, res) => {};
+export const removerLivro = (req, res) => {
+  const { id } = req.params;
+
+  const sql = /*sql*/ `
+    DELETE FROM livros WHERE id = "${id}"
+  `;
+
+  conn.query(sql, (err, info) => {
+    if (err) {
+      return res.status(500).json({ message: "Erro ao buscar livro." });
+    }
+
+    if (info.affectedRows === 0) {
+      return res.status(404).json({ message: "Livro não encontrado." });
+    }
+
+    res.status(200).json({ message: "Livro removido com sucesso." });
+  });
+};
 
 export const buscarLivroPorId = (req, res) => {
   const { id } = req.params;
