@@ -2,11 +2,11 @@
 import { Router } from "express";
 
 // Controllers:
-import {} from "../controllers/funcionariosController.js"
+import { buscarFuncionarios } from "../controllers/funcionariosController.js"
 
 const router = Router();
 
-router.get("/")
+router.get("/", buscarFuncionarios)
 router.post("/")
 router.get("/:id")
 router.put("/:id")
