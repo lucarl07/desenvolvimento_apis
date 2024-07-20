@@ -9,6 +9,7 @@ import "./models/funcionarioModel.js";
 // Route modules:
 import defRoute from "./routes/defRoute.js";
 import livroRoutes from "./routes/livroRoutes.js";
+import funcionarioRoutes from "./routes/funcionarioRoutes.js";
 
 // Server Port:
 const PORT = process.env.PORT;
@@ -28,3 +29,4 @@ app.listen(PORT, () => {
 
 app.use("/", defRoute);
 app.use("/livros", livroRoutes);
+app.use("/funcionarios", funcionarioRoutes)
