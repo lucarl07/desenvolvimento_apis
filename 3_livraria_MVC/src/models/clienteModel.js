@@ -2,7 +2,7 @@ import conn from "../config/conn.js";
 
 const tbClientes = /*sql*/ `
   CREATE TABLE IF NOT EXISTS clientes (
-    id VARCHAR(60) PRIMARY KEY,
+    cliente_id VARCHAR(60) PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     senha VARCHAR(255) NOT NULL,
@@ -17,5 +17,5 @@ conn.query(tbClientes, (err) => {
     console.error("Erro ao criar a tabela: " + err.stack);
     return;
   }
-  console.log('[Tabela "clientes" criada com sucesso.]');
+  console.log('[API] Tabela "clientes" criada com sucesso.');
 });
