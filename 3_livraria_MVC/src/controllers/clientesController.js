@@ -2,11 +2,9 @@ import conn from "../config/conn.js";
 import { v4 as uuidv4 } from "uuid";
 
 export const buscarClientes = (req, res) => {
-  const sql = /*sql*/ `
-    SELECT * FROM clientes
-  `;
+  const SQL = /*sql*/ `SELECT * FROM clientes`;
 
-  conn.query(sql, (err, data) => {
+  conn.query(SQL, (err, data) => {
     if (err) {
       res.status(500).json({ message: "Erro ao buscar clientes." });
       return console.log(err);
@@ -35,12 +33,10 @@ export const adicionarClientes = (req, res) => {
     });
   }
 
-  const verifySQL = /*sql*/ `
-    SELECT * FROM funcionarios
-    WHERE email = "${email}"
-  `;
+  const verifySQL = /*sql*/ `SELECT * FROM funcionarios WHERE ?? = ?`
+  const verifySQLData = ["email", email]
 
-  conn.query(verifySQL, (err, data) => {
+  conn.query(verifySQL, verifySQLData, (err, data) => {
     if (err) {
       res.status(500).json({ message: "Erro ao acessar o banco de dados." });
       return console.log(err);
@@ -53,12 +49,16 @@ export const adicionarClientes = (req, res) => {
     }
 
     const id = uuidv4();
-    const insertSQL = /*sql*/ `
-      INSERT INTO funcionarios (id, nome, email, senha, imagem)
-      VALUES ("${id}", "${nome}", "${email}", "${senha}", "${imagem}")
-    `;
 
-    conn.query(insertSQL, (err) => {
+    const insertSQL = /*sql*/ `
+      INSERT INTO funcionarios (??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, ?)
+    `;
+    const insertSQLData = [
+      "cliente_id", "nome", "email", "senha", "imagem", 
+      id, nome, email, senha, imagem
+    ]
+
+    conn.query(insertSQL, insertSQLData, (err) => {
       if (err) {
         res.status(500).json({ message: "Erro interno ao cadastrar o cliente." });
         return console.log(err);
@@ -72,12 +72,10 @@ export const adicionarClientes = (req, res) => {
 export const buscarClientePorId = (req, res) => {
   const id = req.params.id;
 
-  const sql = /*sql*/ `
-    SELECT * FROM clientes
-    WHERE id = "${id}"
-  `;
+  const SQL = /*sql*/ `SELECT * FROM clientes WHERE ?? = ?`
+  const SQLData = ["cliente_id", id];
 
-  conn.query(sql, (err, data) => {
+  conn.query(SQL, SQLData, (err, data) => {
     if (err) {
       res.status(500).json({ message: "Erro ao buscar cliente." });
       return console.log(err);
@@ -112,10 +110,11 @@ export const alterarClientes = (req, res) => {
   }
 
   const searchSQL = /*sql*/ `
-    SELECT * FROM funcionarios WHERE id = "${id}"
+    SELECT * FROM funcionarios WHERE ?? = ?
   `;
+  const searchSQLData = ["cliente_id", id]
 
-  conn.query(searchSQL, ($err, $data) => {
+  conn.query(searchSQL, searchSQLData, ($err, $data) => {
     if ($err) {
       res.status(500).json({ message: "Erro ao buscar cliente." });
       return console.error($err);
@@ -127,12 +126,11 @@ export const alterarClientes = (req, res) => {
     }
 
     const verifySQL = /*sql*/ `
-      SELECT * FROM funcionarios
-      WHERE email = "${email}"
-      AND id != "${id}"
+      SELECT * FROM funcionarios WHERE ?? = ? AND ?? != ?
     `;
+    const verifySQLData = ["email", email, "cliente_id", id]
 
-    conn.query(verifySQL, (err, data) => {
+    conn.query(verifySQL, verifySQLData, (err, data) => {
       if (err) {
         res.status(500).json({ message: "Erro ao buscar funcionário." });
         return console.error(err);
@@ -145,23 +143,26 @@ export const alterarClientes = (req, res) => {
       }
 
       const updateSQL = /*sql*/ `
-        UPDATE funcionarios SET
-        nome = "${nome}",
-        email = "${email}",
-        senha = "${senha}",
-        imagem = "${imagem}"
-        WHERE id = "${id}"
+        UPDATE funcionarios 
+        SET ?? = ?, ?? = ?, ?? = ?, ?? = ?
+        WHERE ?? = ?
       `;
+      const updateSQLData = [
+        "nome", nome, 
+        "email", email, 
+        "senha", senha, 
+        "imagem", imagem, 
+        "cliente_id", id
+      ]
 
-      conn.query(updateSQL, (err) => {
+      conn.query(updateSQL, updateSQLData, (err) => {
         if (err) {
           res.status(500).json({ message: "Erro ao atualizar cliente." });
           return console.error(err);
         }
 
         res.status(200).json({
-          message: "Cliente atualizado com sucesso",
-          data: $data[0],
+          message: "Cliente atualizado com sucesso!"
         });
       });
     });
