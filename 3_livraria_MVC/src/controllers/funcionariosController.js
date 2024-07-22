@@ -2,9 +2,7 @@ import conn from "../config/conn.js";
 import { v4 as uuidv4 } from "uuid";
 
 export const buscarFuncionarios = (req, res) => {
-  const sql = /*sql*/ `
-    SELECT * FROM funcionarios
-  `;
+  const sql = /*sql*/ `SELECT * FROM funcionarios`;
 
   conn.query(sql, (err, data) => {
     if (err) {
@@ -35,12 +33,10 @@ export const adicionarFuncionario = (req, res) => {
     });
   }
 
-  const verifySQL = /*sql*/ `
-    SELECT * FROM funcionarios
-    WHERE email = "${email}"
-  `;
+  const verifySQL = /*sql*/ `SELECT * FROM funcionarios WHERE ?? = ?`;
+  const verifySQLData = ["email", email]
 
-  conn.query(verifySQL, (err, data) => {
+  conn.query(verifySQL, verifySQLData, (err, data) => {
     if (err) {
       res.status(500).json({ message: "Erro ao acessar o banco de dados." });
       return console.log(err);
@@ -53,12 +49,16 @@ export const adicionarFuncionario = (req, res) => {
     }
 
     const id = uuidv4();
+    
     const insertSQL = /*sql*/ `
-      INSERT INTO funcionarios (id, nome, cargo, dt_contratacao, salario, email)
-      VALUES ("${id}", "${nome}", "${cargo}", "${dt_contratacao}", "${salario}", "${email}")
+      INSERT INTO funcionarios (??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, ?, ?)
     `;
+    const insertSQLData = [
+      "funcionario_id", "nome", "cargo", "dt_contratacao", "salario", "email",
+      id, nome, cargo, dt_contratacao, salario, email
+    ]
 
-    conn.query(insertSQL, (err) => {
+    conn.query(insertSQL, insertSQLData, (err) => {
       if (err) {
         res.status(500).json({ message: "Erro interno ao adicionar o livro." });
         return console.log(err);
@@ -72,12 +72,13 @@ export const adicionarFuncionario = (req, res) => {
 export const buscarFuncionarioPorId = (req, res) => {
   const id = req.params.id;
 
-  const sql = /*sql*/ `
+  const SQL = /*sql*/ `
     SELECT * FROM funcionarios
-    WHERE id = "${id}"
+    WHERE ?? = ?
   `;
+  const SQLData = ["funcionario_id", id]
 
-  conn.query(sql, (err, data) => {
+  conn.query(SQL, SQLData, (err, data) => {
     if (err) {
       res.status(500).json({ message: "Erro ao buscar funcionário." });
       return console.log(err);
@@ -112,10 +113,11 @@ export const atualizarFuncionario = (req, res) => {
   }
 
   const searchSQL = /*sql*/ `
-    SELECT * FROM funcionarios WHERE id = "${id}"
+    SELECT * FROM funcionarios WHERE ?? = ?
   `;
+  const searchSQLData = ["funcionario_id", id]
 
-  conn.query(searchSQL, ($err, $data) => {
+  conn.query(searchSQL, searchSQLData, ($err, $data) => {
     if ($err) {
       res.status(500).json({ message: "Erro ao buscar funcionário." });
       return console.error($err);
@@ -126,13 +128,10 @@ export const atualizarFuncionario = (req, res) => {
       return;
     }
 
-    const verifySQL = /*sql*/ `
-      SELECT * FROM funcionarios
-      WHERE email = "${email}"
-      AND id != "${id}"
-    `;
+    const verifySQL = /*sql*/ `SELECT * FROM funcionarios WHERE ?? = ? AND ?? != ?`;
+    const verifySQLData = ["email", email, "funcionario_id", id]
 
-    conn.query(verifySQL, (err, data) => {
+    conn.query(verifySQL, verifySQLData, (err, data) => {
       if (err) {
         res.status(500).json({ message: "Erro ao buscar funcionário." });
         return console.error(err);
@@ -145,16 +144,20 @@ export const atualizarFuncionario = (req, res) => {
       }
 
       const updateSQL = /*sql*/ `
-        UPDATE funcionarios SET
-        nome = "${nome}",
-        cargo = "${cargo}",
-        dt_contratacao = "${dt_contratacao}",
-        salario = "${salario}",
-        email = "${email}"
-        WHERE id = "${id}"
+        UPDATE funcionarios 
+        SET ?? = ?, ?? = ?, ?? = ?, ?? = ?, ?? = ?
+        WHERE ?? = ?
       `;
+      const updateSQLData = [
+        "nome", nome, 
+        "cargo", cargo, 
+        "dt_contratacao", dt_contratacao, 
+        "salario", salario, 
+        "email", email, 
+        "funcionario_id", id
+      ]
 
-      conn.query(updateSQL, (err) => {
+      conn.query(updateSQL, updateSQLData, (err) => {
         if (err) {
           res.status(500).json({ message: "Erro ao atualizar funcionário." });
           return console.error(err);
@@ -172,11 +175,10 @@ export const atualizarFuncionario = (req, res) => {
 export const removerFuncionario = (req, res) => {
   const id = req.params.id;
 
-  const sql = /*sql*/ `
-    DELETE FROM funcionarios WHERE id = "${id}"
-  `;
+  const SQL = /*sql*/ `DELETE FROM funcionarios WHERE ?? = ?`;
+  const SQLData = ["funcionario_id", id]
 
-  conn.query(sql, (err, info) => {
+  conn.query(SQL, SQLData, (err, info) => {
     if (err) {
       res.status(500).json({ message: "Erro ao buscar funcionário." });
       return console.log(err);
