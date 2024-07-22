@@ -26,7 +26,7 @@ app.use(express.json());
 // App Listener:
 app.listen(PORT, () => {
   console.clear();
-  console.log("Bem vindo à 2_2_livraria_MVC API!");
+  console.log("Bem vindo à livraria API 2.1.0!");
   console.log(`Server on PORT: ${PORT} 🚀\n`);
 });
 
