@@ -6,6 +6,7 @@ import express, { application } from "express";
 import "./models/livroModel.js";
 import "./models/funcionarioModel.js";
 import "./models/clienteModel.js";
+import "./models/emprestimoModel.js";
 
 // Route modules:
 import defRoute from "./routes/defRoute.js";
