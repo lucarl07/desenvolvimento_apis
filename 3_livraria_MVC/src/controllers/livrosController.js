@@ -25,13 +25,16 @@ export const cadastrarLivro = (req, res) => {
   }
 
   const checkSQL = /*sql*/ `
-    SELECT * FROM livros 
-    WHERE titulo = "${titulo}" 
-    AND autor = "${autor}"
-    AND ano_publicacao = "${ano_publicacao}"
+    SELECT * FROM livros WHERE ?? = ? AND ?? = ? AND ?? = ?
   `;
 
-  conn.query(checkSQL, (err, data) => {
+  const checkSQLData = [
+    "titulo", titulo,
+    "autor", autor,
+    "ano_publicacao", ano_publicacao
+  ];
+
+  conn.query(checkSQL, checkSQLData, (err, data) => {
     if (err) {
       res
         .status(500)
@@ -41,18 +44,23 @@ export const cadastrarLivro = (req, res) => {
 
     if (data.length > 0) {
       res.status(409).json({ message: "O livro já existe na livraria." });
-      return console.log(err);
+      return;
     }
 
     const id = uuidv4();
     const disponibilidade = 1;
 
     const insertSQL = /*sql*/ `
-      INSERT INTO livros (id, titulo, autor, ano_publicacao, genero, preco, disponibilidade)
-      VALUES ("${id}", "${titulo}", "${autor}", "${ano_publicacao}", "${genero}", "${preco}", "${disponibilidade}")
+      INSERT INTO livros (??, ??, ??, ??, ??, ??, ??) 
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
-    conn.query(insertSQL, (err) => {
+    const insertSQLData = [
+      "livro_id", "titulo", "autor", "ano_publicacao", "genero", "preco", "disponibilidade",
+      id, titulo, autor, ano_publicacao, genero, preco, disponibilidade
+    ]
+
+    conn.query(insertSQL, insertSQLData, (err) => {
       if (err) {
         res.status(500).json({ message: "Erro interno ao adicionar o livro." });
         return console.log(err);
