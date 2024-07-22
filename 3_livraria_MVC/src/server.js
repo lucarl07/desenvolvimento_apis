@@ -13,6 +13,7 @@ import defRoute from "./routes/defRoute.js";
 import livroRoutes from "./routes/livroRoutes.js";
 import funcionarioRoutes from "./routes/funcionarioRoutes.js";
 import clienteRoutes from "./routes/clienteRoutes.js";
+import emprestimoRoutes from "./routes/emprestimoRoutes.js"
 
 // Server Port:
 const PORT = process.env.PORT;
@@ -36,3 +37,4 @@ app.use("/", defRoute);
 app.use("/livros", livroRoutes);
 app.use("/funcionarios", funcionarioRoutes);
 app.use("/clientes", clienteRoutes);
+app.use("/emprestimos", emprestimoRoutes)
