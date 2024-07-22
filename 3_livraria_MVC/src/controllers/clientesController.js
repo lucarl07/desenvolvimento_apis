@@ -33,7 +33,7 @@ export const adicionarClientes = (req, res) => {
     });
   }
 
-  const verifySQL = /*sql*/ `SELECT * FROM funcionarios WHERE ?? = ?`
+  const verifySQL = /*sql*/ `SELECT * FROM clientes WHERE ?? = ?`
   const verifySQLData = ["email", email]
 
   conn.query(verifySQL, verifySQLData, (err, data) => {
@@ -51,7 +51,7 @@ export const adicionarClientes = (req, res) => {
     const id = uuidv4();
 
     const insertSQL = /*sql*/ `
-      INSERT INTO funcionarios (??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, ?)
+      INSERT INTO clientes (??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, ?)
     `;
     const insertSQLData = [
       "cliente_id", "nome", "email", "senha", "imagem", 
@@ -110,7 +110,7 @@ export const alterarClientes = (req, res) => {
   }
 
   const searchSQL = /*sql*/ `
-    SELECT * FROM funcionarios WHERE ?? = ?
+    SELECT * FROM clientes WHERE ?? = ?
   `;
   const searchSQLData = ["cliente_id", id]
 
@@ -126,7 +126,7 @@ export const alterarClientes = (req, res) => {
     }
 
     const verifySQL = /*sql*/ `
-      SELECT * FROM funcionarios WHERE ?? = ? AND ?? != ?
+      SELECT * FROM clientes WHERE ?? = ? AND ?? != ?
     `;
     const verifySQLData = ["email", email, "cliente_id", id]
 
@@ -143,7 +143,7 @@ export const alterarClientes = (req, res) => {
       }
 
       const updateSQL = /*sql*/ `
-        UPDATE funcionarios 
+        UPDATE clientes 
         SET ?? = ?, ?? = ?, ?? = ?, ?? = ?
         WHERE ?? = ?
       `;
