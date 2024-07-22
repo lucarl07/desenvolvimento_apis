@@ -2,7 +2,7 @@ import conn from "../config/conn.js";
 
 const tbFuncionarios = /*sql*/ `
   CREATE TABLE IF NOT EXISTS funcionarios(
-    id VARCHAR(60) PRIMARY KEY,
+    funcionario_id VARCHAR(60) PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     cargo VARCHAR(255) NOT NULL,
     dt_contratacao DATE NOT NULL,
@@ -18,5 +18,5 @@ conn.query(tbFuncionarios, (err) => {
     console.error("Erro ao criar a tabela: " + err.stack);
     return;
   }
-  console.log('[Tabela "funcionarios" criada com sucesso.]');
+  console.log('[API] Tabela "funcionarios" criada com sucesso.');
 });
