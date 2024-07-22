@@ -20,5 +20,5 @@ conn.query(tbLivros, (err, result, field) => {
     return;
   }
   // console.log(result); console.log(field);
-  console.log('[Tabela "livros" criada com sucesso.]');
+  console.log('[API] Tabela "livros" criada com sucesso.');
 });

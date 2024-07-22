@@ -88,11 +88,10 @@ export const alterarLivro = (req, res) => {
       .json({ message: "Enviar a disponibilidade do livro é obrigatória." });
   }
 
-  const sql = /*sql*/ `
-    SELECT * FROM livros WHERE id = "${id}"
-  `;
+  const sql = /*sql*/ `SELECT * FROM livros WHERE ?? = ?`
+  const sqlData = ["livro_id", id];
 
-  conn.query(sql, (err, data) => {
+  conn.query(sql, sqlData, (err, data) => {
     if (err) {
       res.status(500).json({ message: "Erro ao buscar livro." });
       return console.error(err);
@@ -103,18 +102,22 @@ export const alterarLivro = (req, res) => {
       return;
     }
 
-    const updateSql = /*sql*/ `
-      UPDATE livros SET 
-      titulo = "${titulo}",
-      autor = "${autor}",
-      ano_publicacao = "${ano_publicacao}",
-      genero = "${genero}",
-      preco = "${preco}",
-      disponibilidade = "${disponibilidade}"
-      WHERE id = "${id}"
+    const updateSQL = /*sql*/ `
+      UPDATE livros 
+      SET ?? = ?, ?? = ?, ?? = ?, ?? = ?, ?? = ?, ?? = ?
+      WHERE ?? = ?
     `;
+    const updateSQLData = [
+      "titulo", titulo, 
+      "autor", autor, 
+      "ano_publicacao", ano_publicacao, 
+      "genero", genero, 
+      "preco", preco, 
+      "disponibilidade", disponibilidade,
+      "livro_id", id
+    ]
 
-    conn.query(updateSql, (err) => {
+    conn.query(updateSQL, updateSQLData, (err) => {
       if (err) {
         res.status(500).json({ message: "Erro ao buscar livro." });
         return console.error(err);
@@ -130,11 +133,10 @@ export const alterarLivro = (req, res) => {
 export const removerLivro = (req, res) => {
   const { id } = req.params;
 
-  const sql = /*sql*/ `
-    DELETE FROM livros WHERE id = "${id}"
-  `;
+  const sql = /*sql*/ `DELETE FROM livros WHERE ?? = ?`;
+  const sqlData = ["livro_id", id]
 
-  conn.query(sql, (err, info) => {
+  conn.query(sql, sqlData, (err, info) => {
     if (err) {
       return res.status(500).json({ message: "Erro ao buscar livro." });
     }
@@ -150,11 +152,10 @@ export const removerLivro = (req, res) => {
 export const buscarLivroPorId = (req, res) => {
   const { id } = req.params;
 
-  const sql = /*sql*/ `
-    SELECT * FROM livros WHERE id = "${id}"
-  `;
+  const sql = /*sql*/ `SELECT * FROM livros WHERE ?? = ?`;
+  const sqlData = ["livro_id", id]
 
-  conn.query(sql, (err, data) => {
+  conn.query(sql, sqlData, (err, data) => {
     if (err) {
       res.status(500).json({ message: "Erro ao buscar livro." });
       return console.error(err);
@@ -172,11 +173,10 @@ export const buscarLivroPorId = (req, res) => {
 export const buscarLivroPorNome = (req, res) => {
   const { nome } = req.query;
 
-  const sql = /*sql*/ `
-    SELECT * FROM livros WHERE titulo LIKE "%${nome}%"
-  `;
+  const sql = /*sql*/ `SELECT * FROM livros WHERE ?? LIKE ?`;
+  const sqlData = ["titulo", `%${nome}%`]
 
-  conn.query(sql, (err, data) => {
+  conn.query(sql, sqlData, (err, data) => {
     if (err) {
       res.status(500).json({ message: "Erro ao buscar livro." });
       return console.error(err);
