@@ -14,11 +14,14 @@ export const adicionarLinha = (req, res) => {
       res.status(500).json({ message: "Erro ao buscar as linhas." });
       return console.log($err);
     }
-
     if ($data.length > 0) {
       return req.status(409).json({ 
         mensagem: `Uma linha ${numero_linha} já está cadastrada no sistema.` 
       })
+    }
+    if (!nome_linha || !numero_linha || !itinerario) {
+      return res.status(401)
+        .json({ message: "Dados insuficientes para cadastrar a linha." })
     }
 
     const id = uuidv4();
@@ -81,7 +84,7 @@ export const alterarLinha = (req, res) => {
     }
     if (!nome_linha || !numero_linha || !itinerario) {
       return res.status(401)
-        .json({ message: "Dados insuficientes para cadastrar a linha." })
+        .json({ message: "Dados insuficientes para alterar a linha." })
     }
 
     const validateLineSQL = /*sql*/ `
