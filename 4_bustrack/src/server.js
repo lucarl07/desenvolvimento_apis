@@ -3,6 +3,9 @@ import "dotenv/config";
 import express from "express";
 
 // Modelos de entidade:
+import "./models/lineModel.js"
+import "./models/driverModel.js"
+import "./models/busModel.js"
 
 // Módulos de rotas:
 

@@ -13,8 +13,7 @@ const tbClientes = /*sql*/ `
 `;
 
 conn.query(tbClientes, (err) => {
-  if (err) {
-    console.error("Erro ao criar a tabela: " + err.stack);
+  if (err) {console.error("Erro ao criar a tabela: " + err.stack);
     return;
   }
   console.log('[API] Tabela "clientes" criada com sucesso.');
