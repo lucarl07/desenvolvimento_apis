@@ -2,9 +2,12 @@
   "name": "4_bustrack",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
+  "main": "./src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon ./src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "native": "node ./src/server.js"
   },
   "keywords": [],
   "author": "",
