@@ -2,12 +2,18 @@
 import { Router } from "express";
 
 // Controladores:
+import { 
+  adicionarMotorista, 
+  buscarMotoristaPorId, 
+  buscarTodosOsMotoristas, 
+  removerMotorista 
+} from "../controllers/driverController.js";
 
 const router = Router();
 
-router.post("/")
-router.get("/:id_motorista")
-router.delete("/:id_motorista")
-router.get("/")
+router.post("/", adicionarMotorista)
+router.get("/:id_motorista", buscarMotoristaPorId)
+router.delete("/:id_motorista", removerMotorista)
+router.get("/", buscarTodosOsMotoristas)
 
 export default router;
