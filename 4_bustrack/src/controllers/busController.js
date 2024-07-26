@@ -74,18 +74,55 @@ export const buscarOnibusPorId = (req, res) => {
   const searchSQL = /*sql*/ `SELECT * FROM onibus WHERE ?? = ?`,
   searchValues = ["onibus_id", id]
 
-  conn.query(searchSQL, searchValues, (err, data) => {
-    if (err) {
+  conn.query(searchSQL, searchValues, ($err, $data) => {
+    if ($err) {
       res.status(500).json({ message: "Erro ao buscar o ônibus." });
-      return console.log(err);
+      return console.log($err);
     }
 
-    if (data.length === 0) {
+    if ($data.length === 0) {
       res.status(404).json({ message: "Ônibus não encontrado." });
       return;
     }
 
-    res.status(200).json(data[0]);
+    const onibus = $data[0]
+
+    const getDataSQL = /*sql*/ `
+      SELECT linhas.*, motoristas.* FROM onibus
+      LEFT JOIN linhas ON ?? = ?
+      LEFT JOIN motoristas ON ?? = ?
+      WHERE ?? = ? AND ?? = ?
+    `, getDataValues = [
+      "linhas.linha_id", onibus.id_linha,
+      "motoristas.motorista_id", onibus.id_motorista,
+      "onibus.id_linha", onibus.id_linha,
+      "onibus.id_motorista", onibus.id_motorista
+    ]
+
+    conn.query(getDataSQL, getDataValues, (err, data) => {
+      if (err) {
+        res.status(500).json({ message: "Erro ao buscar a linha e/ou motorista do ônibus." });
+        return console.log(err);
+      }
+
+      delete onibus.id_linha;
+      delete onibus.id_motorista;
+
+      const parsedData = data[0]
+      res.status(200).json({
+        ...onibus,
+        linha: {
+          nome_linha: parsedData.nome_linha,
+          numero_linha: parsedData.numero_linha,
+          itinerario: parsedData.itinerario
+        },
+        motorista: {
+          nome: parsedData.nome,
+          data_nascimento: parsedData.data_nascimento,
+          numero_carteira_habilitacao: parsedData.numero_carteira_habilitacao
+        }
+      });
+    })
   })
 }
 
