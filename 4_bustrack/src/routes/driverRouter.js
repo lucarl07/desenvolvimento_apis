@@ -4,7 +4,7 @@ import { Router } from "express";
 // Controladores:
 import { 
   adicionarMotorista, 
-  buscarMotoristaPorId, 
+  buscarMotoristaPeloOnibus, 
   buscarTodosOsMotoristas, 
   removerMotorista 
 } from "../controllers/driverController.js";
@@ -12,7 +12,7 @@ import {
 const router = Router();
 
 router.post("/", adicionarMotorista)
-router.get("/:id_motorista", buscarMotoristaPorId)
+router.get("/:id_onibus", buscarMotoristaPeloOnibus)
 router.delete("/:id_motorista", removerMotorista)
 router.get("/", buscarTodosOsMotoristas)
 

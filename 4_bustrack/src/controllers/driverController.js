@@ -51,24 +51,41 @@ export const adicionarMotorista = (req, res) => {
   })
 }
 
-export const buscarMotoristaPorId = (req, res) => {
-  const id = req.params.id_motorista;
+export const buscarMotoristaPeloOnibus = (req, res) => {
+  const id_onibus = req.params.id_onibus;
 
-  const searchSQL = /*sql*/ `SELECT * FROM motoristas WHERE ?? = ?`,
-  searchValues = ["motorista_id", id]
+  const searchSQL = /*sql*/ `SELECT * FROM onibus WHERE ?? = ?`,
+  searchValues = ["onibus_id", id_onibus]
 
-  conn.query(searchSQL, searchValues, (err, data) => {
-    if (err) {
-      res.status(500).json({ message: "Erro ao buscar o motorista." });
-      return console.log(err);
+  conn.query(searchSQL, searchValues, ($err, $data) => {
+    if ($err) {
+      res.status(500).json({ message: "Erro ao buscar o ônibus do motorista." });
+      return console.log($err);
     }
 
-    if (data.length === 0) {
+    if ($data.length === 0) {
       res.status(404).json({ message: "Motorista não encontrado." });
       return;
     }
 
-    res.status(200).json(data[0]);
+    const motorista_id = $data[0].id_motorista
+
+    const driverSearchSQL = /*sql*/ `
+      SELECT motoristas.* FROM motoristas
+      LEFT JOIN onibus ON ?? = ?
+      WHERE ?? = ?
+    `, driverSearchValues = [
+      "onibus.id_motorista", "motoristas.motorista_id",
+      "motoristas.motorista_id", motorista_id
+    ]
+
+    conn.query(driverSearchSQL, driverSearchValues, (err, data) => {
+      if (err) {
+        res.status(500).json({ message: "Erro ao buscar o motorista." });
+        return console.log(err);
+      }
+      res.status(200).json(data[0]);
+    })
   })
 }
 
