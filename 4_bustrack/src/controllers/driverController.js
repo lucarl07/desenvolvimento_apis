@@ -15,7 +15,7 @@ export const adicionarMotorista = (req, res) => {
       return console.log($err);
     }
     if ($data.length > 0) {
-      return req.status(409)
+      return res.status(409)
         .json({ 
           mensagem: `O número da Carteira de Habilitação já está cadastrado no sistema.` 
         })

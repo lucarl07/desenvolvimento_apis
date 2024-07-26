@@ -15,7 +15,7 @@ export const adicionarLinha = (req, res) => {
       return console.log($err);
     }
     if ($data.length > 0) {
-      return req.status(409).json({ 
+      return res.status(409).json({ 
         mensagem: `Uma linha ${numero_linha} já está cadastrada no sistema.` 
       })
     }
